@@ -1,83 +1,95 @@
 from tkinter import *
+import time
 
-# Create a button and associate it with a function to be called when clicked
-def on_button_click():
-
-    label.config(text="Option Selected")
 def initialwindow(window):
+#variables for photos of pizza
+    pepperoniImg = PhotoImage(file='.\\Pepperoni.gif') #image of a pepperoni pizza
+    hawaiianImg = PhotoImage(file='.\\Hawaiian.gif') #Image of hawaiian pizza
     #Put everything in frame
-    frame1 = Frame(window)
+    frame1 = Frame(window) #first container, to the left
     frame1.pack(anchor='n', side=LEFT)
-    
-   
-    #greeting
-    greeting = Label(
-        master = frame1,
-        text="Cassandra's Pizzeria",
-        width=20,
-        height=5
-        )
-    greeting.pack()
-
-    #Choose Pizza Heading
+#Choose Pizza Heading
     label = Label(frame1, text="Choose Your Pizza")
     label.pack()
-
-    #Create buttons to select pizza type
-    pizzaButton(hawaiian, "Hawaiian Pizza", frame1)
-    pizzaButton(pepperoni, "Pepperoni Pizza", frame1)
-    pizzaButton(cheese, "Cheese Pizza", frame1)
-    pizzaButton(custom, "Create a pizza", frame1)
-
- #add pizza pictures in frame
+#Create buttons to select pizza type
+    buttonMaker(defaultCallback, "Hawaiian Pizza", frame1)
+    buttonMaker(defaultCallback, "Pepperoni Pizza", frame1)
+    buttonMaker(defaultCallback, "Cheese Pizza", frame1)
+    buttonMaker(custom, "Create a pizza", frame1)
+#add pizza pictures in frame
     frame2 = Frame(window)
     frame2.pack(anchor='n', side=LEFT)
     label=Label(frame2, text="Cassandra's Pizzas")
     label.pack()
+#Pepperoni Image
     canvaspepperoni = Canvas(frame2,width = 300, height = 300)
     canvaspepperoni.pack()
-    img = PhotoImage(file='C:\\Users\\Cassa\Desktop\\Programming Stuff\\Final Project\\resources\\Pepperoni.gif')
-    canvaspepperoni.create_image(150, 150, image=img)
+    canvaspepperoni.create_image(150, 150, image=pepperoniImg)
+#Hawaiian Image
     canvashawaiian = Canvas(frame2,width = 300, height = 300)
     canvashawaiian.pack()
-    imghawaiian = PhotoImage(file='C:\\Users\\Cassa\Desktop\\Programming Stuff\\Final Project\\resources\\sss.gif')
-    canvashawaiian.create_image(150, 150, image=imghawaiian)
-
-
+    canvashawaiian.create_image(150, 150, image=hawaiianImg)
+#Checkout button
+    checkoutButton = Button(master = frame2, text = "Checkout", command = checkout, width = 25, height = 1)
+    checkoutButton.pack()
+#exit button
+    exitButton = Button(master = frame2, text = "Exit", command = quitOut, width = 15, height = 1)
+    exitButton.pack()
+#run the program
     mainloop()
 
-def pizzaButton(callback, buttonText, frame):
-    button = Button(master = frame, text=buttonText, command=callback, width = 25, height = 1)
+def buttonMaker(callback, buttonText, frame):
+    button = Button(master = frame, text = buttonText, command = callback, width = 25, height = 1)
     button.pack(pady=10, padx=20, side=TOP, anchor='w')
 
-def hawaiian(callback, buttonText, frame):
-    hawaiibutton = Button(text=buttonText, command=callback, width=25, height=1 )
+#Pops up when you click a button
+def optionSelected():
+    popupWindow = Toplevel()
+    popupWindow.title("Success")
+    optionSelectLabel = Label(popupWindow, text = "Option Selected!\n Please check out")
+    optionSelectLabel.pack()
 
-def pepperoni(callback, buttonText, frame):
-    pepperonibutton = Button(text=buttonText, command=callback, width=25, height=1 )
- 
-def cheese(callback, buttonText, frame):
-    cheesebutton = Button(text=buttonText, command=callback, width=25, height=1 )
-    
-def custom(callback, buttonText, frame):
-    custom_window = Toplevel(window)
-    custom_window.title("Custom Pizza")
-    
-    toppings_label = Label(custom_window, text="Select your toppings:")
-    toppings_label.pack()
+#The function for buttons that aren't custom pizzas
+def defaultCallback():
+    optionSelected()
 
-# Create the main Tkinter window
-window = Tk()
-window.title("Main Window")
+#Custom toppings window
+def custom():
+    customWindow = Toplevel()
+    customWindow.title("Select Toppings")
+#frame for organzing
+    frame1 = Frame(customWindow)
+    frame1.pack()
+    optionSelectLabel = Label(frame1, text = "Select your toppings:")
+    optionSelectLabel.pack()
+#checkboxes for toppings
+    mushroomsCheck = IntVar()
+    sausageCheck = IntVar()
+    hamCheck = IntVar()
+    baconCheck = IntVar()
+    pineappleCheck = IntVar()
+    mushroomsCheckBox = Checkbutton(frame1, text = "Mushrooms", variable = mushroomsCheck, onvalue = 1, offvalue = 0)
+    mushroomsCheckBox.pack()
+    sausageCheckBox = Checkbutton(frame1, text = "Sausage", variable = sausageCheck, onvalue = 1, offvalue = 0)
+    sausageCheckBox.pack()
+    hamCheckBox = Checkbutton(frame1, text = "Ham", variable = hamCheck, onvalue = 1, offvalue = 0)
+    mushroomsCheckBox.pack()
+    baconCheckBox = Checkbutton(frame1, text = "Bacon", variable = baconCheck, onvalue = 1, offvalue = 0)
+    baconCheckBox.pack()
+    pineappleCheckBox = Checkbutton(frame1, text = "Pineapple", variable = pineappleCheck, onvalue = 1, offvalue = 0)
+    pineappleCheckBox.pack()
 
-# Create a button that, when clicked, opens a new window
-open_button = Button(window, text="Open Custom Pizza Window", command=custom)
-open_button.pack(pady=20)
 
-# Start the Tkinter event loop
-window.mainloop()
+#button callback for checkout
+def checkout():
+    popupWindow = Toplevel()
+    popupWindow.title("Checkout")
+    checkOutLabel = Label(popupWindow, text = "Order Received, please pay in store!")
+    checkOutLabel.pack()
+def quitOut():
+    mainWindow.destroy()
 # Create the main window
-window = Tk()
-window.title("Cassandra's Pizzeria")
-initialwindow(window)
-#loop window
+mainWindow = Tk()
+mainWindow.title("Cassandra's Pizzeria")
+#Run the application
+initialwindow(mainWindow)
